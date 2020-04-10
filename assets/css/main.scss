@@ -1,0 +1,268 @@
+//Fonts
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue&family=Poppins&display=swap');
+
+
+$comic:'Comic Neue',
+cursive;
+
+$popins:'Poppins',
+sans-serif;
+
+//Colors
+$black: #000000;
+$dgray: lighten($black, 15);
+$mgray: lighten($black, 55);
+$lgray: lighten($black, 85);
+$white: lighten($black, 100);
+
+$color: #303952;
+$color2: #546de5;
+
+//Mixins
+@mixin prefix($property, $value, $vendors: webkit moz ms o, $default: true) {
+
+    // -moz-$property: $value;
+    // -webkit-$property: $value;
+    // -o-$property: $value;
+    // -ms-$property: $value;
+    // property: $value
+    @if $vendors {
+        @each $vendor in $vendors {
+            #{"-" + $vendor + "-" + $property}: #{$value};
+        }
+    }
+
+    @if $default {
+        #{$property}: #{$value};
+    }
+}
+
+@mixin transition($time) {
+    @include prefix(transition, all $time);
+}
+
+@mixin shadow($x, $y, $spread, $color, $opacity) {
+    @include prefix(box-shadow, $x $y $spread 0px rgba($color, $opacity));
+}
+
+@mixin bradius($size) {
+    @include prefix(border-radius, $size + px);
+}
+
+@mixin font-size($size, $base: 16) {
+    font-size: $size; // fallback for old browsers
+    font-size: ($size / $base) * 1rem;
+}
+
+@mixin gradient($angle, $color1, $color2) {
+    @include prefix(background, linear-gradient($angle, $color1, $color2) fixed);
+}
+
+* {
+    box-sizing: border-box;
+    color: $dgray;
+    font-family: Arial, Helvetica, sans-serif;
+
+    input:focus,
+    textarea:focus,
+    select:focus,
+    *:focus {
+        outline: none;
+    }
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    background: $color;
+    background-size: cover;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0px;
+    @include font-size(16);
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+
+    li {
+        display: inline-block;
+    }
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0px auto;
+}
+
+.col {
+    width: 100%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparentize($black, .2);
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.msgPop {
+    position: fixed;
+    top: -100%;
+    left: 50%;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 700px;
+    min-height: 200px;
+    background: $white;
+    text-align: center;
+    z-index: 11;
+
+    #cerrarPopup {
+        position: absolute;
+        display: block;
+        top: 0px;
+        right: 0px;
+        width: 50px;
+        height: 50px;
+        //background: $lgray;
+        padding: 10px;
+        cursor: pointer;
+        @include transition(.2s);
+
+        svg {
+            @include transition(.2s);
+            @include prefix(transform, scale(.9));
+
+            g {
+                path {
+                    @include transition(.2s);
+                    fill: $lgray;
+                }
+            }
+        }
+
+        &:hover {
+
+            //background: $dgray;
+            svg {
+                @include prefix(transform, scale(.7));
+
+                g {
+                    path {
+                        fill: $dgray;
+                    }
+                }
+            }
+        }
+    }
+
+    p {
+        width: 90%;
+        @include font-size(22);
+        font-weight: 700;
+        text-transform: uppercase;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+
+.centrame {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    @include prefix(transform, translate(-50%, -50%));
+    width: 90%;
+    max-width: 500px;
+
+    input {
+        width: 100%;
+        padding: 20px;
+        border: 1px solid $white;
+        @include bradius(10);
+        @include font-size(16);
+        font-family: $popins;
+        color: $mgray;
+        @include transition(.2s);
+        @include shadow(0px, 0px, 0px, $black, .2);
+
+        &:hover {
+            @include shadow(0px, 20px, 20px, $black, .2);
+        }
+
+        &:focus {
+            @include shadow(0px, 20px, 20px, $black, .2);
+            color: $dgray;
+        }
+    }
+
+    #enviarNumero {
+        position: absolute;
+        top: 50%;
+        right: 1.5%;
+        @include prefix(transform, translateY(-50%));
+        display: block;
+        width: 100px;
+        height: 50px;
+        border: 0px;
+        background: lighten($color2, 10);
+        font-family: $popins;
+        text-transform: uppercase;
+        @include bradius(10);
+        @include font-size(18);
+        color: $white;
+        cursor: pointer;
+        @include transition(.2s);
+        @include shadow(0px, 10px, 10px, lighten($color2, 10), 0);
+
+        &:hover {
+            background: $color2;
+            @include shadow(0px, 0px, 20px, lighten($color2, 10), .5);
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .msgPop {
+        p {
+            width: 85%;
+            @include font-size(16);
+        }
+    }
+
+    .centrame {
+        #enviarNumero {
+            position: relative;
+            top: 0; right: 0;
+            @include prefix(transform, translateY(0%));
+            width: 100%;
+            margin-top: 20px;
+        }
+    }
+}
